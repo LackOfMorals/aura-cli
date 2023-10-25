@@ -106,18 +106,21 @@ def _authenticate():
 
 def get_headers():
     """Returns the HTTP headers used for Aura API requests"""
+    logger = get_logger()
 
     token = _authenticate()
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {token}",
-        "User-Agent": f"AuraCLI/{__version__}",
+        "User-Agent": f"AuraDCCLI/{__version__}",
     }
+
+    logger.debug(f"Headers {headers}")
     return headers
 
 
 def make_api_call(method: str, path: str, **kwargs):
-    """Make a HTTP request to the Aura API"""
+    """Make a HTTP request to the  API"""
 
     ctx = click.get_current_context()
     config: CLIConfig = ctx.obj
@@ -126,8 +129,20 @@ def make_api_call(method: str, path: str, **kwargs):
     headers = get_headers()
 
     # Get url by priority: First by env var, then by config setting, then by default url
-    base_url = config.env["base_url"]
+    # little hack to use a different base url for data connectors
+
+    logger.debug(f"Checking path {path}")
+
+    if path.startswith("/data-connectors"):
+        logger.debug("path starts with /data-connectors, setting base_url")
+        logger.debug(config.env["base_dc_url"])
+        base_url = config.env["base_dc_url"]
+    else:
+        base_url = config.env["base_url"]
+
     full_url = base_url + path
+
+
 
     logger.debug(f"Initializing connection to Aura Cloud Platform API endpoint: {base_url}")
     data_string = " with data: " + json.dumps(kwargs["data"]) if "data" in kwargs else ""

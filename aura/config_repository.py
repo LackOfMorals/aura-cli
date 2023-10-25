@@ -28,8 +28,9 @@ class CLIConfig:
         "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
         "OPTIONS": {},
     }
-    DEFAULT_BASE_URL = "https://api.neo4j.io/v1"
-    DEFAULT_AUTH_URL = "https://api.neo4j.io/oauth/token"
+    DEFAULT_BASE_URL = "https://api-staging.neo4j.io/v1"
+    DEFAULT_BASE_DC_URL = "https://graphql-api-staging.neo4j.io/v1"
+    DEFAULT_AUTH_URL = "https://api-staging.neo4j.io/oauth/token"
 
     def __init__(self):
         self.logger = None
@@ -52,6 +53,11 @@ class CLIConfig:
             os.environ.get("AURA_CLI_BASE_URL")
             or self.get_option("base_url")
             or self.DEFAULT_BASE_URL
+        )
+        env["base_dc_url"] = (
+                os.environ.get("AURA_CLI_BASE_DC_URL")
+                or self.get_option("base_dc_url")
+                or self.DEFAULT_BASE_DC_URL
         )
         env["auth_url"] = (
             os.environ.get("AURA_CLI_AUTH_URL")
