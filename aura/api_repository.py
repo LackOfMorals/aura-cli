@@ -112,7 +112,7 @@ def get_headers():
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {token}",
-        "User-Agent": f"AuraDCCLI/{__version__}",
+        "User-Agent": f"GraphQLAuraCLI/{__version__}",
     }
 
     logger.debug(f"Headers {headers}")
@@ -141,8 +141,6 @@ def make_api_call(method: str, path: str, **kwargs):
         base_url = config.env["base_url"]
 
     full_url = base_url + path
-
-
 
     logger.debug(f"Initializing connection to Aura Cloud Platform API endpoint: {base_url}")
     data_string = " with data: " + json.dumps(kwargs["data"]) if "data" in kwargs else ""

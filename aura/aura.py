@@ -10,10 +10,13 @@ from aura.config import config
 from aura.version import __version__
 
 from aura.dataconnectors import dataconnectors
-from aura.dataconnectors_graphql import dataconnectors_graphql
+
+import warnings
+
 
 CLI_VERSION_MESSAGE = f"Aura CLI: version {__version__}, Aura API: version v1"
 
+warnings.filterwarnings("ignore")
 
 @click.group()
 @click.version_option(
@@ -33,7 +36,8 @@ cli.add_command(snapshots)
 cli.add_command(tenants)
 cli.add_command(config)
 cli.add_command(dataconnectors)
-cli.add_command(dataconnectors_graphql)
+
+
 
 
 def log_usage_errors(func):

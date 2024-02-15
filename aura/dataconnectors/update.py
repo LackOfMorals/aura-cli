@@ -43,3 +43,29 @@ def update_dataconnector(data_connector_id: str,
 
 
     return make_api_call("PATCH", path, data=json.dumps(data))
+
+
+@api_command(name="update_td", help_text="Update a graphql data connector type definitions")
+@click.option("--data-connector-id", "-dcid", prompt=True, help="Mandatory. The ID of the data connector to modify")
+@click.option("--type-defs", "-td", prompt=True, help="The GraphQL type definitions to use with the data connector")
+
+
+def update_dataconnector_graphql(data_connector_id: str,
+                         type_defs: str):
+    """
+    Update type defs for a graphql data connector.
+
+    Makes "PATCH /data-connectors/:data connector ID/graphql" API request.
+    """
+
+    data = {}
+
+    if type_defs:
+        data["type_definitions"] = type_defs
+
+        path = f"/data-connectors/{data_connector_id}"
+
+        return make_api_call("PATCH", path, data=json.dumps(data))
+
+    else:
+        return { "No type defs given"}
